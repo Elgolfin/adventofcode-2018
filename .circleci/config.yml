@@ -16,7 +16,11 @@ jobs:
             python -m unittest day01_test.py -v
             coverage run day01_test.py -v
             coverage report -m
+            python -m unittest day02_test.py -v
+            coverage run day02_test.py -v
+            coverage report -m
       - run:
           name: "Get the results"
           command: |
             python day01.py inputs/day01.txt
+            python day02.py inputs/day02.txt
