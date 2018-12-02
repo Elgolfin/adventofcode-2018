@@ -8,4 +8,5 @@ with open(sys.argv[1], 'r') as inputFile:
 
 RESULTING_FREQUENCY = day01_lib.calibrate_frequency(FREQUENCIES)
 print("Day01 --- Part One --- result is: {0}".format(RESULTING_FREQUENCY))
+RESULTING_FREQUENCY = day01_lib.get_first_frequency_reached_twice(FREQUENCIES)
 print("Day01 --- Part Two --- result is: {0}".format(RESULTING_FREQUENCY))
