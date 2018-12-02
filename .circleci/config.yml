@@ -1,0 +1,22 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: python:3.6.4
+    working_directory: ~/adventofcode-2018
+    branches:
+      only:
+        - master
+    steps:
+      - checkout
+      - run:
+          name: "Run unit tests"
+          command: |
+            pip install coverage
+            python -m unittest day01_test.py -v
+            coverage run day01_test.py -v
+            coverage report -m
+      - run:
+          name: "Get the results"
+          command: |
+            python day01.py inputs/day01.txt
