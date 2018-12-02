@@ -3,6 +3,7 @@
 import unittest
 from day02_lib import countLetters
 from day02_lib import checksum
+from day02_lib import getCommonLetters
 
 class Day02TestCase(unittest.TestCase):
     """Tests for `day02.py`"""
@@ -50,10 +51,16 @@ class Day02TestCase(unittest.TestCase):
         self.assertEqual(threeTimes, 2)
 
     def test_checksum_should_return_12(self):
-        """Test for checksun """
+        """Test for checksum """
         inputValues = ['abcdef', 'bababc', 'abbcde', 'abcccd', 'aabcdd', 'abcdee', 'ababab']
         checksumResult = checksum(inputValues)
         self.assertEqual(checksumResult, 12)
+
+    def test_commonLetters_should_return_fgij(self):
+        """Test for common letters """
+        inputValues = ['abcde', 'fghij', 'klmno', 'pqrst', 'fguij', 'axcye', 'wvxyz']
+        commonLettersResult = getCommonLetters(inputValues)
+        self.assertEqual(commonLettersResult, "fgij")
 
 if __name__ == '__main__':
     unittest.main()

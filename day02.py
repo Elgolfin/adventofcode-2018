@@ -8,5 +8,5 @@ with open(sys.argv[1], 'r') as inputFile:
 
 CHECKSUM = day02_lib.checksum(STRINGS)
 print("Day02 --- Part One --- result is: {0}".format(CHECKSUM))
-# RESULTING_FREQUENCY = day01_lib.get_first_frequency_reached_twice(FREQUENCIES)
-# print("Day01 --- Part Two --- result is: {0}".format(RESULTING_FREQUENCY))
+COMMON_LETTERS = day02_lib.getCommonLetters(STRINGS)
+print("Day02 --- Part Two --- result is: {0}".format(COMMON_LETTERS))
