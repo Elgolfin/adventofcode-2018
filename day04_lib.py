@@ -35,14 +35,26 @@ def getGuardResult(entries):
             records[guardId][m] += 1 # Update the guard last record
     # print(records)
 
-    resultGuardId = -1
-    maxMinutes = 0
+    resultGuardId1 = -1
+    resultGuardId2 = -1
+    maxMinutesAsleep = 0
+    mostFrequentlyAsleepMinute = -1
     for gid, gminutes in records.items():
         totalMin = sum([m for m in gminutes if m > 0])
-        if totalMin > maxMinutes:
-            maxMinutes = totalMin
-            resultGuardId = gid
-    # print(resultGuardId)
-    # print(maxMinutes)
+        frequentlyMin = max(gminutes)
+        if totalMin > maxMinutesAsleep:
+            maxMinutesAsleep = totalMin
+            resultGuardId1 = gid
+        if frequentlyMin > mostFrequentlyAsleepMinute:
+            mostFrequentlyAsleepMinute = frequentlyMin
+            resultGuardId2 = gid
+    # print(resultGuardId1)
+    # print(maxMinutesAsleep)
     # print(records[resultGuardId].index(max(records[resultGuardId])))
-    return int(resultGuardId) * records[resultGuardId].index(max(records[resultGuardId]))
+    # print(resultGuardId2)
+    # print(records[resultGuardId2].index(mostFrequentlyAsleepMinute))
+
+    result1 = int(resultGuardId1) * records[resultGuardId1].index(max(records[resultGuardId1]))
+    result2 = int(resultGuardId2) * records[resultGuardId2].index(mostFrequentlyAsleepMinute)
+
+    return result1, result2

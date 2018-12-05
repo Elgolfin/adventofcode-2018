@@ -6,7 +6,7 @@ from day04_lib import getGuardResult
 class day04TestCase(unittest.TestCase):
     """Tests for `day04.py`"""
 
-    def test_getGuardResult_should_return_240(self):
+    def test_getGuardResult_should_return_240_and_4455(self):
         """Test for getGuardResult"""
         guardEntries = [
             "[1518-11-01 00:00] Guard #10 begins shift",
@@ -27,8 +27,9 @@ class day04TestCase(unittest.TestCase):
             "[1518-11-05 00:45] falls asleep",
             "[1518-11-05 00:55] wakes up",
         ]
-        result = getGuardResult(guardEntries)
-        self.assertEqual(240, result)
+        result1, result2 = getGuardResult(guardEntries)
+        self.assertEqual(240, result1)
+        self.assertEqual(4455, result2)
 
 if __name__ == '__main__':
     unittest.main()
