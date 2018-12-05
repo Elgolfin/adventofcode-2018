@@ -1,7 +1,7 @@
 """Day 04 puzzle solutions"""
 
 def getGuardResult(entries):
-    """Parse a claim on the format #123 @ 3,2: 5x4"""
+    """Solve the day 04 puzzle"""
     entries.sort()
     records = {}
     previousMinutes = 0
