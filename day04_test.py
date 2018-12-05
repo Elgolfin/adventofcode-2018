@@ -1,4 +1,4 @@
-"""Day 03 unit tests"""
+"""Day 04 unit tests"""
 
 import unittest
 from day04_lib import getGuardResult
