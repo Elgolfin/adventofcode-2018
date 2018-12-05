@@ -10,7 +10,7 @@
 
 ## Day 03
 
-Once again, the solution proposed [here](https://github.com/ecly/adventofcode2018/blob/master/day01/calibration.py) is neat.
+Once again, the solution proposed [here](https://github.com/ecly/adventofcode2018/blob/master/day03/sliceit.py) is neat.
 
 1. Create a grid of type ***dict***  
    *The key of the dict being the coordinates of a cell*.
