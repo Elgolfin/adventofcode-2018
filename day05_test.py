@@ -6,7 +6,7 @@ from day05_lib import scanPolymer2
 from day05_lib import scanPolymerV2
 
 class day05TestCase(unittest.TestCase):
-    """Tests for `day04.py`"""
+    """Tests for `day05.py`"""
 
     def test_scanPolymer_should_return_dabCBAcaDA(self):
         """Test for scanPolymer"""
