@@ -2,6 +2,15 @@
 
 import string
 
+def scanPolymerV2 (polymer):
+    shortestPolymerLength = 0
+    for letter in range(26):
+        newPolymer = polymer.replace(string.ascii_letters[letter], "").replace(string.ascii_letters[letter + 26], "")
+        result = scanPolymer(newPolymer)
+        if shortestPolymerLength == 0 or result < shortestPolymerLength:
+            shortestPolymerLength = result
+    return shortestPolymerLength
+
 def scanPolymer (polymer):
     """Solve the day 05 puzzle"""
     polymerLength = len(polymer)
