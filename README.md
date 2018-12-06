@@ -26,3 +26,11 @@ Once again, the solution proposed [here](https://github.com/ecly/adventofcode201
 arr = [i for i in range(10)]
 print(arr)
 ```
+
+## Day 05
+
+I did two methods.
+One fairly simple that involved regex and string replacements.
+Because I've misread the question, I did not return the remaining units but the resulting polymer after the reaction.
+Therefore, I've implemented another method that was removing reactions one by one. With the exact same result, indeed.
+And then, I finally read again the question and return the right answer. :)
