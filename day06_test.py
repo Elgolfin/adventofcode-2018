@@ -5,7 +5,9 @@ from day06_lib import getManhattanDist
 from day06_lib import initializeGrid
 from day06_lib import getClosestManhattanDist
 from day06_lib import determineClosestCoordinate
-from day06_lib import  getLargestArea
+from day06_lib import getLargestArea
+from day06_lib import getSizeOfAllLocationsWithinLimit
+from day06_lib import getSumAllManhattanDist
 
 class day06TestCase(unittest.TestCase):
     """Tests for `day06.py`"""
@@ -42,6 +44,12 @@ class day06TestCase(unittest.TestCase):
         coordinates, _ = initializeGrid(["1, 1", "1, 6", "8, 3", "3, 4", "5, 5", "8, 9"])
         result = getClosestManhattanDist((5,0), coordinates)
         self.assertEqual('.', result)
+
+    def test_getSumAllManhattanDist_should_return_30(self):
+        """Test for getClosestManhattanDist"""
+        coordinates, _ = initializeGrid(["1, 1", "1, 6", "8, 3", "3, 4", "5, 5", "8, 9"])
+        result = getSumAllManhattanDist((4,3), coordinates)
+        self.assertEqual(30, result)
     
     def test_determineClosestCoordinate(self):
         """Test for determineClosestCoordinate"""
@@ -64,6 +72,12 @@ class day06TestCase(unittest.TestCase):
         grid = determineClosestCoordinate(coordinates, grid)
         result = getLargestArea(coordinates, grid)
         self.assertEqual(17, result)
+
+    def test_getSizeOfAllLocationsWithinLimit_should_return_16(self):
+        """Test for getSizeOfAllLocationsWithinLimit"""
+        coordinates, grid = initializeGrid(["1, 1", "1, 6", "8, 3", "3, 4", "5, 5", "8, 9"])
+        result = getSizeOfAllLocationsWithinLimit(coordinates, grid, 32)
+        self.assertEqual(16, result)
 
 if __name__ == '__main__':
     unittest.main()

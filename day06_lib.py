@@ -22,6 +22,14 @@ def getClosestManhattanDist (p1, coordinates):
                 closestDistPointName = '.'
     return closestDistPointName
 
+def getSumAllManhattanDist (p1, coordinates):
+    """Gets the sum pf all manhattan distances of a point from a list of coordinates"""
+    sumManhattanDist = 0
+    for _, coordinate in coordinates.items():
+        dist = abs(p1[0] - coordinate[0]) + abs(p1[1] - coordinate[1])
+        sumManhattanDist += dist
+    return sumManhattanDist
+
 def initializeGrid (entries):
     """Initialize the grid by drawing each point coordinates"""
     currentIdx = 0
@@ -72,3 +80,13 @@ def getLargestArea (coordinates, grid):
         del areas[point]
 
     return max(areas.values())
+
+def getSizeOfAllLocationsWithinLimit (coordinates, grid, limit):
+    """Get the size of all locations which have a total distance to all given coordinates of less than 10000"""
+    areaSize = 0
+    for x in range(len(grid)):
+        for y in range(len(grid[x])):
+            sumDist = getSumAllManhattanDist((x, y), coordinates)
+            if sumDist < limit:
+                areaSize += 1
+    return areaSize
