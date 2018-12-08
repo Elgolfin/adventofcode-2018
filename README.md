@@ -6,11 +6,11 @@
 
 ## Day 01
 
-[itertools.cycle](https://docs.python.org/3.6/library/itertools.html#itertools.cycle) would have been a better solution as seen [here](https://github.com/ecly/adventofcode2018/blob/master/day01/calibration.py) afterwards.
+[itertools.cycle](https://docs.python.org/3.6/library/itertools.html#itertools.cycle) would have been a better solution as seen [here](https://github.com/ecly/adventofcode2018/blob/master/day01/day01.py) afterwards.
 
 ## Day 03
 
-Once again, the solution proposed [here](https://github.com/ecly/adventofcode2018/blob/master/day03/sliceit.py) is neat.
+Once again, the solution proposed [here](https://github.com/ecly/adventofcode2018/blob/master/day03/day03.py) is neat.
 
 1. Create a grid of type ***dict***  
    *The key of the dict being the coordinates of a cell*.
