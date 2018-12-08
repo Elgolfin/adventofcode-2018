@@ -14,20 +14,7 @@ def findStartingSteps (entries):
             steps[step1] = set()
         successors.add(step2)
     startingSteps = sorted(list((steps.keys() | set()).difference(successors)))
-    # print(steps)
-    # print(startingSteps)
-    return startingSteps, steps 
-
-def orderSteps (availableSteps, steps):
-    done = set()
-    result = []
-    while len(availableSteps) > 0:
-        currentStep = availableSteps.pop(0)
-        result.append(currentStep)
-        done.add(currentStep)
-        del steps[currentStep]
-        availableSteps = getAvailableSteps(done, steps)
-    return ''.join(result)
+    return startingSteps, steps
 
 def getAvailableSteps (doneSteps, steps):
     availableSteps = []
@@ -35,6 +22,60 @@ def getAvailableSteps (doneSteps, steps):
         if nextSteps.issubset(doneSteps):
             availableSteps.append(step)
     return sorted(availableSteps)
+
+def completeSteps (availableSteps, steps, numWorkers = 5, stepDuration = 60):
+    numSteps = len(steps)
+    second = 0
+    done = set()
+    result = []
+    workers =  {worker: ('.', 0) for worker in range(numWorkers)}
+    # print()
+    # print(steps)
+    # print(availableSteps)
+    while len(result) < numSteps:
+        # print("-------------")
+        # print("Second: {0}".format(second))
+
+        # Free the workers if they are done with the processing of a step
+        workers, stepsDone = freeWorkers(workers, second)
+        for stepDone in stepsDone:
+            # print("Done: {0}".format(stepDone))
+            result.append(stepDone)
+            done.add(stepDone)
+            availableSteps = getAvailableSteps(done, steps)
+            # print(availableSteps)
+
+        # Feed the workers if any is available and if any step avalable to be processed
+        worker = returnAvailableWorker(workers)
+        while worker > -1 and len(availableSteps) > 0:
+            currentStep = availableSteps.pop(0)
+            workers[worker] = (currentStep, second + ord(currentStep) - 65 + stepDuration)
+            del steps[currentStep]
+            worker = returnAvailableWorker(workers)
+        # print(workers)
+        # print("Current result: {0}".format(result))
+        second += 1
+
+        # Safe Gaurd: Break the loop in case of infinite loop
+        # if second > 100000:
+        #     break
+    return ''.join(result), second - 1
+
+def returnAvailableWorker (workers):
+    availableWorker = -1
+    for worker, (_, availableAt) in workers.items():
+        if availableAt == 0:
+            availableWorker = worker
+            break
+    return availableWorker
+
+def freeWorkers (workers, currentSecond):
+    stepsDone = set()
+    for worker, (step, availableAt) in workers.items():
+        if availableAt > 0 and availableAt < currentSecond:
+            workers[worker] = ('.', 0)
+            stepsDone.add(step)
+    return workers, stepsDone
 
 def parseStepLine (line):
     result = line.strip().split(" must be finished before step ")
