@@ -29,21 +29,13 @@ def completeSteps (availableSteps, steps, numWorkers = 5, stepDuration = 60):
     done = set()
     result = []
     workers =  {worker: ('.', 0) for worker in range(numWorkers)}
-    # print()
-    # print(steps)
-    # print(availableSteps)
     while len(result) < numSteps:
-        # print("-------------")
-        # print("Second: {0}".format(second))
-
         # Free the workers if they are done with the processing of a step
         workers, stepsDone = freeWorkers(workers, second)
         for stepDone in stepsDone:
-            # print("Done: {0}".format(stepDone))
             result.append(stepDone)
             done.add(stepDone)
             availableSteps = getAvailableSteps(done, steps)
-            # print(availableSteps)
 
         # Feed the workers if any is available and if any step avalable to be processed
         worker = returnAvailableWorker(workers)
@@ -52,13 +44,7 @@ def completeSteps (availableSteps, steps, numWorkers = 5, stepDuration = 60):
             workers[worker] = (currentStep, second + ord(currentStep) - 65 + stepDuration)
             del steps[currentStep]
             worker = returnAvailableWorker(workers)
-        # print(workers)
-        # print("Current result: {0}".format(result))
         second += 1
-
-        # Safe Gaurd: Break the loop in case of infinite loop
-        # if second > 100000:
-        #     break
     return ''.join(result), second - 1
 
 def returnAvailableWorker (workers):
