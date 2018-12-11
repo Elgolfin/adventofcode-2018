@@ -26,18 +26,23 @@ def getPowerLevel (x, y, serialNumber):
 
     return powerLevel
 
-def getLargestTotalPowerArea (serialNumber):
+def getLargestTotalPowerArea (serialNumber, size = 3):
     width = 300
     height = 300
     largestTotalPowerAreaTopLeftCoordinates = (0, 0)
     grid = [[getPowerLevel(x, y, serialNumber) for y in range (1, width + 1)] for x in range(1, height + 1)]
     totalPower = -9999999
-    for x in range(300 - 3):
-        for y in range(300 - 3):
-            currentTotalPower = grid[x][y] + grid[x+1][y] + grid[x+2][y]
-            currentTotalPower += grid[x][y+1] + grid[x+1][y+1] + grid[x+2][y+1]
-            currentTotalPower += grid[x][y+2] + grid[x+1][y+2] + grid[x+2][y+2]
+    for x in range(300 - size):
+        for y in range(300 - size):
+            currentTotalPower = calculatePower(x, y, grid, size)
             if currentTotalPower > totalPower:
                 totalPower = currentTotalPower
                 largestTotalPowerAreaTopLeftCoordinates = (x + 1, y + 1)
     return largestTotalPowerAreaTopLeftCoordinates
+
+def calculatePower (x, y, grid, size):
+    currentTotalPower = 0
+    for i in range(size):
+        for j in range(size):
+            currentTotalPower += grid[x+i][y+j]
+    return currentTotalPower
