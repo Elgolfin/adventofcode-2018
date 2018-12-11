@@ -37,6 +37,9 @@ jobs:
             python -m unittest day10_test.py -v
             coverage run day10_test.py -v
             coverage report -m
+            python -m unittest day11_test.py -v
+            coverage run day11_test.py -v
+            coverage report -m
       - run:
           name: "Get the results"
           command: |
@@ -48,3 +51,4 @@ jobs:
             python day06.py inputs/day06.txt
             python day07.py inputs/day07.txt
             python day10.py inputs/day10.txt
+            python day10.py inputs/day11.txt
