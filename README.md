@@ -34,3 +34,9 @@ One fairly simple that involved regex and string replacements.
 Because I've misread the question, I did not return the remaining units but the resulting polymer after the reaction.
 Therefore, I've implemented another method that was removing reactions one by one. With the exact same result, indeed.
 And then, I finally read again the question and return the right answer. :)
+
+## Day 11
+
+The code for the part 2 puzzle is not optimal as I force the calculation for an area of size between 3 and 16.
+It takes much more longer for every size above 16. As the answer is below 16, I did not tke the time to improve my solution.
+
