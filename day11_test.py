@@ -38,17 +38,17 @@ class day11TestCase(unittest.TestCase):
         coordinates, _ = getLargestTotalPowerArea(input)
         self.assertEqual((33, 45), coordinates)
 
-    def test_getLargestTotalPowerArea2_should_return_x90_y269_16(self):
-        """Test for getLargestTotalPowerArea2"""
-        input = 18
-        coordinates = getLargestTotalPowerArea2(input)
-        self.assertEqual((90, 269, 16), coordinates)
-
-    # def test_getLargestTotalPowerArea2_should_return_x232_y251_12(self):
+    # def test_getLargestTotalPowerArea2_should_return_x90_y269_16(self):
     #     """Test for getLargestTotalPowerArea2"""
-    #     input = 42
+    #     input = 18
     #     coordinates = getLargestTotalPowerArea2(input)
-    #     self.assertEqual((232, 251, 12), coordinates)
+    #     self.assertEqual((90, 269, 16), coordinates)
+
+    def test_getLargestTotalPowerArea2_should_return_x232_y251_12(self):
+        """Test for getLargestTotalPowerArea2"""
+        input = 42
+        coordinates = getLargestTotalPowerArea2(input)
+        self.assertEqual((232, 251, 12), coordinates)
 
 
 if __name__ == '__main__':
