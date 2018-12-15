@@ -38,13 +38,32 @@ def growNextGeneration (state, spreadTable):
     return newState.rstrip('.'), idx
 
 def sumPotNumbersAfterNGenerations(initialState, spreadTable, n):
+    history = set({})
     newState, index = initialState, 0
     sumPotNumbers = 0
-    for _ in range(1, n + 1):
+    currentSumPotNumbers = 0
+    diff = 0
+    history.add(initialState)
+    count = 1
+    for i in range(1, n + 1):
+        count = i
         newState, newIndex = growNextGeneration(newState, spreadTable)
         index += newIndex
+        currentSumPotNumbers = sumPots(newState, index)
+        diff = currentSumPotNumbers - sumPotNumbers
+        if newState.strip('.') in history:
+            break
+        history.add(newState.strip('.'))
+        sumPotNumbers = currentSumPotNumbers
+    sumPotNumbers = sumPots(newState, index)
+    if count < n:
+        sumPotNumbers = sumPotNumbers + (n - count) * diff
+    return sumPotNumbers
+
+def sumPots(state, index):
+    sumPotNumbers = 0
     currentIndex = index * -1
-    for pot in newState:
+    for pot in state:
         if pot == '#':
             sumPotNumbers += currentIndex
         currentIndex += 1
