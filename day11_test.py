@@ -3,6 +3,7 @@
 import unittest
 from day11_lib import getPowerLevel
 from day11_lib import getLargestTotalPowerArea
+from day11_lib import getLargestTotalPowerArea2
 
 class day11TestCase(unittest.TestCase):
     """Tests for `day11.py`"""
@@ -31,11 +32,24 @@ class day11TestCase(unittest.TestCase):
         powerLevel = getPowerLevel(101,153, input)
         self.assertEqual(4, powerLevel)
 
-    def test_ggetLargestTotalPowerArea_should_return_x33_y45(self):
+    def test_getLargestTotalPowerArea_should_return_x33_y45(self):
         """Test for getLargestTotalPowerArea"""
         input = 18
-        coordinates = getLargestTotalPowerArea(input)
+        coordinates, _ = getLargestTotalPowerArea(input)
         self.assertEqual((33, 45), coordinates)
+
+    def test_getLargestTotalPowerArea2_should_return_x90_y269_16(self):
+        """Test for getLargestTotalPowerArea2"""
+        input = 18
+        coordinates = getLargestTotalPowerArea2(input)
+        self.assertEqual((90, 269, 16), coordinates)
+
+    # def test_getLargestTotalPowerArea2_should_return_x232_y251_12(self):
+    #     """Test for getLargestTotalPowerArea2"""
+    #     input = 42
+    #     coordinates = getLargestTotalPowerArea2(input)
+    #     self.assertEqual((232, 251, 12), coordinates)
+
 
 if __name__ == '__main__':
     unittest.main()

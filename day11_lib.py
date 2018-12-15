@@ -38,7 +38,17 @@ def getLargestTotalPowerArea (serialNumber, size = 3):
             if currentTotalPower > totalPower:
                 totalPower = currentTotalPower
                 largestTotalPowerAreaTopLeftCoordinates = (x + 1, y + 1)
-    return largestTotalPowerAreaTopLeftCoordinates
+    return largestTotalPowerAreaTopLeftCoordinates, totalPower
+
+def getLargestTotalPowerArea2 (serialNumber):
+    areaPower = -9999999
+    result = (0, 0, 0)
+    for i in range(3, 16):
+        coordinates, currentPower = getLargestTotalPowerArea(serialNumber, i)
+        if currentPower > areaPower:
+            areaPower = currentPower
+            result = (coordinates[0], coordinates[1], i)
+    return result
 
 def calculatePower (x, y, grid, size):
     currentTotalPower = 0
