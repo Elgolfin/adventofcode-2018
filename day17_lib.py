@@ -57,26 +57,36 @@ def countWaterTiles (ground, startingCell):
     maxY = max(y_coordinates)
     
     i = 1 # for the safeguard mechanism, see below
-    max_iterations = 10
-    currentCellCoordinate = startingCell
+    max_iterations = 20
+    cellQueue = [startingCell]
+    print()
     while True:
-        currentCell = ground[currentCellCoordinate]
+        print(cellQueue)
+        currentCellCoordinate = cellQueue.pop()
+        print(currentCellCoordinate)
+        currentCellType = ground[currentCellCoordinate]
 
-        if currentCell == '+' or currentCell == '|':
-            # Go down, otherwise go left or right
+        if currentCellType == '+' or currentCellType == '|':
+            
             nextCellCoordinate = (currentCellCoordinate[0], currentCellCoordinate[1] + 1)
             # Exit mechanism, water cannot propagate anymore below the max y level
             if nextCellCoordinate[1] > maxY:
                 break
+
+            # Go down, otherwise go left or right
             if ground[nextCellCoordinate] == '.':
                 ground[nextCellCoordinate] = '|'
+                cellQueue.append(nextCellCoordinate)
             else:
                 if ground[nextCellCoordinate] == '#' or ground[nextCellCoordinate] == '~':
-                    settleWater(ground, (currentCellCoordinate))
-            currentCellCoordinate = nextCellCoordinate
+                    cellQueue.extend(settleWater(ground, (currentCellCoordinate)))
 
         printGround(ground)
-        
+        input("")
+
+        if not cellQueue:
+            break
+
         # Safeguard mechanism to prevent infinite loop
         i += 1
         if i >= max_iterations: 
@@ -91,7 +101,7 @@ def settleWater (ground, origin):
     y = origin[1]
     leftClayCoordinate = set()
     rightClayCoordinate = set()
-    newOrigin = set()
+    newOrigin = list()
     for x in range(origin[0], maxX + 1):
         if ground[(x, y)] == '#':
             rightClayCoordinate = (x, y)
@@ -100,23 +110,25 @@ def settleWater (ground, origin):
         if ground[(x, y)] == '#':
             leftClayCoordinate = (x, y)
 
+    print((leftClayCoordinate, rightClayCoordinate))
+
     if leftClayCoordinate and rightClayCoordinate:
         print("Fill with still water to both sides")
         for x in range(leftClayCoordinate[0] + 1, rightClayCoordinate[0]):
             if ground[(x, y)] == '.' or ground[(x, y)] == '|':
                 ground[(x, y)] = '~'
-        newOrigin = (origin[0], origin[1] - 1)
+        newOrigin.append((origin[0], origin[1] - 1))
     
     if leftClayCoordinate and not rightClayCoordinate:
-        newOrigin = fillWaterToTheSide(ground, leftClayCoordinate[0] + 1, maxX + 1, y)
+        newOrigin.append(fillWaterToTheSide(ground, leftClayCoordinate[0] + 1, maxX + 1, y))
     
     if not leftClayCoordinate and rightClayCoordinate:
-        newOrigin = fillWaterToTheSide(ground, origin[0], minX - 1, y)
+        newOrigin.append(fillWaterToTheSide(ground, origin[0], minX - 1, y))
     
     if not leftClayCoordinate and not rightClayCoordinate:
         print("Fill with flowing water to both sides")
-        newOrigin = fillWaterToTheSide(ground, origin[0], maxX + 1, y)
-        newOrigin = fillWaterToTheSide(ground, origin[0], minX - 1, y)
+        newOrigin.append(fillWaterToTheSide(ground, origin[0], maxX + 1, y))
+        newOrigin.append(fillWaterToTheSide(ground, origin[0], minX - 1, y))
 
     return newOrigin
 
