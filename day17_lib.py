@@ -104,7 +104,7 @@ def countWaterTiles (ground, startingCell):
         if i >= max_iterations: 
             break
 
-    return ground.count('~') + ground.count('|')
+    return sum(1 for c in ground.values() if c == '~' or c =='|')
 
 def settleWater (ground, origin):
     x_coordinates, _ = zip(*ground.keys())
