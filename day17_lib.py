@@ -115,12 +115,17 @@ def settleWater (ground, origin):
     rightClayCoordinate = set()
     newOrigin = list()
     for x in range(origin[0], maxX + 1):
+        if ground[(x, y + 1)] != '#' and ground[(x, y + 1)] != '~':
+            break
         if ground[(x, y)] == '#':
             rightClayCoordinate = (x, y)
             break
-    for x in range(minX, origin[0]):
+    for x in range(origin[0], minX - 1, -1):
+        if ground[(x, y + 1)] != '#' and ground[(x, y + 1)] != '~':
+            break
         if ground[(x, y)] == '#':
             leftClayCoordinate = (x, y)
+            break
 
     print((leftClayCoordinate, rightClayCoordinate))
 
