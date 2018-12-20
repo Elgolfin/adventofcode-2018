@@ -9,7 +9,6 @@ def initializeGround (inputs):
 
     minX = 0
     maxX = 0
-    minY = 0
     maxY = 0
     clay_x_coordinates = list()
     clay_y_coordinates = list()
@@ -31,7 +30,6 @@ def initializeGround (inputs):
 
     minX = min(clay_x_coordinates)
     maxX = max(clay_x_coordinates)
-    minY = min(clay_y_coordinates)
     maxY = max(clay_y_coordinates)
     
     # Initialize a ground full of sand
@@ -53,11 +51,10 @@ def countWaterTiles (ground, startingCell):
     x_coordinates, y_coordinates = zip(*ground.keys())
     minX = min(x_coordinates)
     maxX = max(x_coordinates)
-    minY = min(y_coordinates)
     maxY = max(y_coordinates)
     
     i = 1 # for the safeguard mechanism, see below
-    max_iterations = 100000
+    max_iterations = 10000000
     cellQueue = [startingCell]
     # print()
     while True:
@@ -103,7 +100,7 @@ def countWaterTiles (ground, startingCell):
         i += 1
         if i >= max_iterations: 
             break
-
+    printGround(ground)
     return sum(1 for c in ground.values() if c == '~' or c =='|')
 
 def settleWater (ground, origin):
