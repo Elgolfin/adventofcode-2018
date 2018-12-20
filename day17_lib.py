@@ -119,12 +119,14 @@ def settleWater (ground, origin):
         if ground[(x, y + 1)] != '#' and ground[(x, y + 1)] != '~':
             break
         if ground[(x, y)] == '#':
+            print("  found right clay")
             rightClayCoordinate = (x, y)
             break
     for x in range(origin[0], minX - 1, -1):
         if ground[(x, y + 1)] != '#' and ground[(x, y + 1)] != '~':
             break
         if ground[(x, y)] == '#':
+            print("  found right clay")
             leftClayCoordinate = (x, y)
             break
 
@@ -141,7 +143,7 @@ def settleWater (ground, origin):
         newOrigin.append(fillWaterToTheSide(ground, leftClayCoordinate[0] + 1, maxX + 1, y))
     
     if not leftClayCoordinate and rightClayCoordinate:
-        newOrigin.append(fillWaterToTheSide(ground, origin[0], minX - 1, y))
+        newOrigin.append(fillWaterToTheSide(ground, rightClayCoordinate[0] - 1, minX - 1, y))
     
     if not leftClayCoordinate and not rightClayCoordinate:
         newOrigin.append(fillWaterToTheSide(ground, origin[0], maxX + 1, y))
