@@ -62,6 +62,8 @@ def countWaterTiles (ground, startingCell):
     print()
     while True:
         print("Queue to process: {0}".format(cellQueue))
+        if not cellQueue:
+            break
         currentCellCoordinate = cellQueue.pop()
         currentCellType = ground[currentCellCoordinate]
         print("Current cell: {0} / {1}".format(currentCellCoordinate, currentCellType))
@@ -102,7 +104,7 @@ def countWaterTiles (ground, startingCell):
         if i >= max_iterations: 
             break
 
-    return 57
+    return ground.count('~') + ground.count('|')
 
 def settleWater (ground, origin):
     x_coordinates, _ = zip(*ground.keys())
