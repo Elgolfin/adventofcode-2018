@@ -60,9 +60,27 @@ class day17TestCase(unittest.TestCase):
 
     def test_countWaterTiles_should_return_57(self):
         """Test for countWaterTiles"""
-        ground = initializeGround(self.input4)
+        ground = initializeGround(self.input1)
         result = countWaterTiles(ground, (500, 0))
         self.assertEqual(57, result)
+
+    def test_countWaterTiles_should_return_11(self):
+        """Test for countWaterTiles"""
+        ground = initializeGround(self.input2)
+        result = countWaterTiles(ground, (500, 0))
+        self.assertEqual(11, result)
+
+    def test_countWaterTiles_should_return_46(self):
+        """Test for countWaterTiles"""
+        ground = initializeGround(self.input3)
+        result = countWaterTiles(ground, (500, 0))
+        self.assertEqual(46, result)
+
+    def test_countWaterTiles_should_return_47(self):
+        """Test for countWaterTiles"""
+        ground = initializeGround(self.input4)
+        result = countWaterTiles(ground, (500, 0))
+        self.assertEqual(47, result)
 
 if __name__ == '__main__':
     unittest.main()
