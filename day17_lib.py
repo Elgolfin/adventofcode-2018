@@ -31,8 +31,6 @@ def initializeGround (inputs):
     minX = min(clay_x_coordinates)
     maxX = max(clay_x_coordinates)
     maxY = max(clay_y_coordinates)
-
-    print("x min/max: {0}/{1}".format(minX, maxX))
     
     # Initialize a ground full of sand
     for y in range(0, maxY + 1):
@@ -49,38 +47,49 @@ def initializeGround (inputs):
 
     return ground
 
-def countWaterTiles (ground, startingCell):
+def countWaterTiles (ground, startingCell, debug = False):
     x_coordinates, y_coordinates = zip(*ground.keys())
     minX = min(x_coordinates)
     maxX = max(x_coordinates)
     maxY = max(y_coordinates)
     
+    if debug:
+        print("minx x/ max x/ max y: {0}/{1}/{2}".format(minX, maxX, maxY))
+
     flowingWaterHistory = []
 
     i = 1 # for the safeguard mechanism, see below
     max_iterations = 10000000
     cellQueue = [startingCell]
     lastFlowingWaterCellCoordinate = set()
-    # print()
+    if debug:
+        print()
     while True:
-        print("Queue to process: {0}".format(cellQueue))
+        if debug:
+            print("___")
+            print("Flowing water history: {0}".format(flowingWaterHistory))
+            print("Queue to process: {0}".format(cellQueue))
         if not cellQueue:
             break
         currentCellCoordinate = cellQueue.pop()
         currentCellType = ground[currentCellCoordinate]
-        print("Current cell: {0} / {1}".format(currentCellCoordinate, currentCellType))
+        if debug:
+            print("Current cell: {0} / {1}".format(currentCellCoordinate, currentCellType))
 
         if currentCellType == '+' or currentCellType == '|':
             
             nextBottomCellCoordinate = (currentCellCoordinate[0], currentCellCoordinate[1] + 1)
-            print("Next cell: {0} / {1}".format(nextBottomCellCoordinate, ground[nextBottomCellCoordinate]))
+            if debug:
+                print("Next bottom cell: {0} / {1}".format(nextBottomCellCoordinate, ground[nextBottomCellCoordinate]))
+
             # Exit mechanism, water cannot propagate anymore below the max y level
             if nextBottomCellCoordinate[1] > maxY:
                 continue
 
             # Go down, otherwise go left or right
             if ground[nextBottomCellCoordinate] == '.':
-                print("Going down")
+                if debug:
+                    print("Going down")
                 ground[nextBottomCellCoordinate] = '|'
                 flowingWaterHistory.append(nextBottomCellCoordinate)
                 cellQueue.append(nextBottomCellCoordinate)
@@ -93,35 +102,49 @@ def countWaterTiles (ground, startingCell):
                         nextLeftCellType = ground[nextLeftCellCoordinate]
                     if nextRightCellCoordinate[0] <= maxX:
                         nextRightCellType = ground[nextRightCellCoordinate]
+                    if debug:
+                        print("Next left cell: {0} / {1}".format(nextLeftCellCoordinate, nextLeftCellType))
+                        print("Next right cell: {0} / {1}".format(nextRightCellCoordinate, nextRightCellType))
                     if nextLeftCellType == '.' or nextRightCellType == '.' :
-                        cellQueue.extend(settleWater(ground, currentCellCoordinate, flowingWaterHistory))
+                        cellQueue.extend(settleWater(ground, currentCellCoordinate, flowingWaterHistory, debug))
                     if nextLeftCellType == '#' and nextRightCellType == '#' :
                         ground[currentCellCoordinate] = '~'
+                        if debug:
+                            print("Going up")
                         if currentCellCoordinate in flowingWaterHistory :
                             flowingWaterHistory.remove((currentCellCoordinate))
                             cellQueue.append((currentCellCoordinate[0], currentCellCoordinate[1] - 1))
 
-        printGroundPart(ground, currentCellCoordinate[0], currentCellCoordinate[1])
+        if debug:
+            printGroundPart(ground, currentCellCoordinate[0], currentCellCoordinate[1])
         # input("")
 
         if not cellQueue:
+            if debug:
+                print("Queue is empty")
             if currentCellCoordinate != lastFlowingWaterCellCoordinate:
                 lastFlowingWaterCellCoordinate = flowingWaterHistory.pop()
                 cellQueue.append(lastFlowingWaterCellCoordinate)
+                if debug:
+                    print("Last flowing water cell: {0}".format(lastFlowingWaterCellCoordinate))
                 continue
             else:
                 ground[currentCellCoordinate] = 'X'
-                printGroundPart(ground, currentCellCoordinate[0], currentCellCoordinate[1])
+                if debug:
+                    print()
+                    print("__FINAL__")
+                    printGroundPart(ground, currentCellCoordinate[0], currentCellCoordinate[1])
                 break
 
         # Safeguard mechanism to prevent infinite loop
         i += 1
         if i >= max_iterations: 
             break
-    # printGround(ground)
+    
+    printGround(ground)
     return sum(1 for c in ground.values() if c == '~' or c =='|' or c == 'X')
 
-def settleWater (ground, origin, flowingWaterHistory):
+def settleWater (ground, origin, flowingWaterHistory, debug = False):
     x_coordinates, _ = zip(*ground.keys())
     minX = min(x_coordinates)
     maxX = max(x_coordinates)
@@ -133,49 +156,54 @@ def settleWater (ground, origin, flowingWaterHistory):
         if ground[(x, y + 1)] != '#' and ground[(x, y + 1)] != '~':
             break
         if ground[(x, y)] == '#':
-            print("  found right clay")
+            if debug:
+                print("  found right clay")
             rightClayCoordinate = (x, y)
             break
     for x in range(origin[0], minX - 1, -1):
         if ground[(x, y + 1)] != '#' and ground[(x, y + 1)] != '~':
             break
         if ground[(x, y)] == '#':
-            print("  found right clay")
+            if debug:
+                print("  found left clay")
             leftClayCoordinate = (x, y)
             break
 
     # print((leftClayCoordinate, rightClayCoordinate))
 
     if leftClayCoordinate and rightClayCoordinate:
-        print("Fill with still water to both sides")
+        if debug:
+            print("Fill with still water to both sides")
         for x in range(leftClayCoordinate[0] + 1, rightClayCoordinate[0]):
             if ground[(x, y)] == '.' or ground[(x, y)] == '|':
                 if ground[(x, y)] == '|' and (x, y) in flowingWaterHistory :
                     flowingWaterHistory.remove((x,y))
                 ground[(x, y)] = '~'
-        newOrigin.append((origin[0], origin[1] - 1))
+            newOrigin.append((origin[0], origin[1] - 1))
     
     if leftClayCoordinate and not rightClayCoordinate:
-        newOrigin.append(fillWaterToTheSide(ground, leftClayCoordinate[0] + 1, maxX + 1, y))
+        newOrigin.append(fillWaterToTheSide(ground, leftClayCoordinate[0] + 1, maxX + 1, y, debug))
     
     if not leftClayCoordinate and rightClayCoordinate:
-        newOrigin.append(fillWaterToTheSide(ground, rightClayCoordinate[0] - 1, minX - 1, y))
+        newOrigin.append(fillWaterToTheSide(ground, rightClayCoordinate[0] - 1, minX - 1, y, debug))
     
     if not leftClayCoordinate and not rightClayCoordinate:
-        newOrigin.append(fillWaterToTheSide(ground, origin[0], maxX + 1, y))
-        newOrigin.append(fillWaterToTheSide(ground, origin[0], minX - 1, y))
+        newOrigin.append(fillWaterToTheSide(ground, origin[0], maxX + 1, y, debug))
+        newOrigin.append(fillWaterToTheSide(ground, origin[0], minX - 1, y, debug))
 
     return newOrigin
 
-def fillWaterToTheSide (ground, p_from, p_to, y):
+def fillWaterToTheSide (ground, p_from, p_to, y, debug = False):
     step = 1
 
     if p_from > p_to:
         step *= -1
-        print("Fill with flowing water to the left")
+        if debug:
+            print("Fill with flowing water to the left")
         pass
     else:
-        print("Fill with flowing water to the right")
+        if debug:
+            print("Fill with flowing water to the right")
         pass
 
     for x in range(p_from, p_to, step):
@@ -215,4 +243,5 @@ def printGroundPart (ground, x, y):
         for x in range(minX, maxX + 1 ):
             print(ground[(x, y)], sep=' ', end='', flush=True)
         print()
+    print()
     return
