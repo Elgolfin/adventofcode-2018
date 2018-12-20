@@ -95,6 +95,11 @@ def countWaterTiles (ground, startingCell):
                         nextRightCellType = ground[nextRightCellCoordinate]
                     if nextLeftCellType == '.' or nextRightCellType == '.' :
                         cellQueue.extend(settleWater(ground, currentCellCoordinate, flowingWaterHistory))
+                    if nextLeftCellType == '#' and nextRightCellType == '#' :
+                        ground[currentCellCoordinate] = '~'
+                        if currentCellCoordinate in flowingWaterHistory :
+                            flowingWaterHistory.remove((currentCellCoordinate))
+                            cellQueue.append((currentCellCoordinate[0], currentCellCoordinate[1] - 1))
 
         printGroundPart(ground, currentCellCoordinate[0], currentCellCoordinate[1])
         # input("")
