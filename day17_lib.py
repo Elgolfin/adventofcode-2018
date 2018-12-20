@@ -55,9 +55,12 @@ def countWaterTiles (ground, startingCell):
     maxX = max(x_coordinates)
     maxY = max(y_coordinates)
     
+    flowingWaterHistory = []
+
     i = 1 # for the safeguard mechanism, see below
     max_iterations = 10000000
     cellQueue = [startingCell]
+    lastFlowingWaterCellCoordinate = set()
     # print()
     while True:
         print("Queue to process: {0}".format(cellQueue))
@@ -79,6 +82,7 @@ def countWaterTiles (ground, startingCell):
             if ground[nextBottomCellCoordinate] == '.':
                 print("Going down")
                 ground[nextBottomCellCoordinate] = '|'
+                flowingWaterHistory.append(nextBottomCellCoordinate)
                 cellQueue.append(nextBottomCellCoordinate)
             else:
                 if ground[nextBottomCellCoordinate] == '#' or ground[nextBottomCellCoordinate] == '~':
@@ -90,15 +94,20 @@ def countWaterTiles (ground, startingCell):
                     if nextRightCellCoordinate[0] <= maxX:
                         nextRightCellType = ground[nextRightCellCoordinate]
                     if nextLeftCellType == '.' or nextRightCellType == '.' :
-                        cellQueue.extend(settleWater(ground, (currentCellCoordinate)))
+                        cellQueue.extend(settleWater(ground, currentCellCoordinate, flowingWaterHistory))
 
         printGroundPart(ground, currentCellCoordinate[0], currentCellCoordinate[1])
         # input("")
 
         if not cellQueue:
-            ground[currentCellCoordinate] = 'X'
-            printGroundPart(ground, currentCellCoordinate[0], currentCellCoordinate[1])
-            break
+            if currentCellCoordinate != lastFlowingWaterCellCoordinate:
+                lastFlowingWaterCellCoordinate = flowingWaterHistory.pop()
+                cellQueue.append(lastFlowingWaterCellCoordinate)
+                continue
+            else:
+                ground[currentCellCoordinate] = 'X'
+                printGroundPart(ground, currentCellCoordinate[0], currentCellCoordinate[1])
+                break
 
         # Safeguard mechanism to prevent infinite loop
         i += 1
@@ -107,7 +116,7 @@ def countWaterTiles (ground, startingCell):
     # printGround(ground)
     return sum(1 for c in ground.values() if c == '~' or c =='|' or c == 'X')
 
-def settleWater (ground, origin):
+def settleWater (ground, origin, flowingWaterHistory):
     x_coordinates, _ = zip(*ground.keys())
     minX = min(x_coordinates)
     maxX = max(x_coordinates)
@@ -136,6 +145,8 @@ def settleWater (ground, origin):
         print("Fill with still water to both sides")
         for x in range(leftClayCoordinate[0] + 1, rightClayCoordinate[0]):
             if ground[(x, y)] == '.' or ground[(x, y)] == '|':
+                if ground[(x, y)] == '|' and (x, y) in flowingWaterHistory :
+                    flowingWaterHistory.remove((x,y))
                 ground[(x, y)] = '~'
         newOrigin.append((origin[0], origin[1] - 1))
     
