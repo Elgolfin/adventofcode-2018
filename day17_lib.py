@@ -57,29 +57,39 @@ def countWaterTiles (ground, startingCell):
     maxY = max(y_coordinates)
     
     i = 1 # for the safeguard mechanism, see below
-    max_iterations = 20
+    max_iterations = 100000
     cellQueue = [startingCell]
     print()
     while True:
-        print(cellQueue)
+        print("Queue to process: {0}".format(cellQueue))
         currentCellCoordinate = cellQueue.pop()
-        print(currentCellCoordinate)
         currentCellType = ground[currentCellCoordinate]
+        print("Current cell: {0} / {1}".format(currentCellCoordinate, currentCellType))
 
         if currentCellType == '+' or currentCellType == '|':
             
-            nextCellCoordinate = (currentCellCoordinate[0], currentCellCoordinate[1] + 1)
+            nextBottomCellCoordinate = (currentCellCoordinate[0], currentCellCoordinate[1] + 1)
+            print("Next cell: {0} / {1}".format(nextBottomCellCoordinate, ground[nextBottomCellCoordinate]))
             # Exit mechanism, water cannot propagate anymore below the max y level
-            if nextCellCoordinate[1] > maxY:
-                break
+            if nextBottomCellCoordinate[1] > maxY:
+                continue
 
             # Go down, otherwise go left or right
-            if ground[nextCellCoordinate] == '.':
-                ground[nextCellCoordinate] = '|'
-                cellQueue.append(nextCellCoordinate)
+            if ground[nextBottomCellCoordinate] == '.':
+                print("Going down")
+                ground[nextBottomCellCoordinate] = '|'
+                cellQueue.append(nextBottomCellCoordinate)
             else:
-                if ground[nextCellCoordinate] == '#' or ground[nextCellCoordinate] == '~':
-                    cellQueue.extend(settleWater(ground, (currentCellCoordinate)))
+                if ground[nextBottomCellCoordinate] == '#' or ground[nextBottomCellCoordinate] == '~':
+                    nextLeftCellCoordinate = (currentCellCoordinate[0] - 1, currentCellCoordinate[1])
+                    nextRightCellCoordinate = (currentCellCoordinate[0] + 1, currentCellCoordinate[1])
+                    nextLeftCellType, nextRightCellType = '', ''
+                    if nextLeftCellCoordinate[0] >= minX:
+                        nextLeftCellType = ground[nextLeftCellCoordinate]
+                    if nextRightCellCoordinate[0] <= maxX:
+                        nextRightCellType = ground[nextRightCellCoordinate]
+                    if nextLeftCellType == '.' or nextRightCellType == '.' :
+                        cellQueue.extend(settleWater(ground, (currentCellCoordinate)))
 
         printGround(ground)
         input("")
@@ -126,7 +136,6 @@ def settleWater (ground, origin):
         newOrigin.append(fillWaterToTheSide(ground, origin[0], minX - 1, y))
     
     if not leftClayCoordinate and not rightClayCoordinate:
-        print("Fill with flowing water to both sides")
         newOrigin.append(fillWaterToTheSide(ground, origin[0], maxX + 1, y))
         newOrigin.append(fillWaterToTheSide(ground, origin[0], minX - 1, y))
 
@@ -143,7 +152,7 @@ def fillWaterToTheSide (ground, p_from, p_to, y):
 
     for x in range(p_from, p_to, step):
         newOrigin = (x, y)
-        if ground[(x, y + 1)] == '#' and ground[(x, y)] == '.' or ground[(x, y)] == '|':
+        if (ground[(x, y + 1)] == '#' or ground[(x, y + 1)] == '~') and ground[(x, y)] == '.' or ground[(x, y)] == '|':
             ground[(x, y)] = '|'
         else:
             ground[newOrigin] = '|'
