@@ -31,6 +31,8 @@ def initializeGround (inputs):
     minX = min(clay_x_coordinates)
     maxX = max(clay_x_coordinates)
     maxY = max(clay_y_coordinates)
+
+    print("x min/max: {0}/{1}".format(minX, maxX))
     
     # Initialize a ground full of sand
     for y in range(0, maxY + 1):
@@ -58,24 +60,24 @@ def countWaterTiles (ground, startingCell):
     cellQueue = [startingCell]
     # print()
     while True:
-        # print("Queue to process: {0}".format(cellQueue))
+        print("Queue to process: {0}".format(cellQueue))
         if not cellQueue:
             break
         currentCellCoordinate = cellQueue.pop()
         currentCellType = ground[currentCellCoordinate]
-        # print("Current cell: {0} / {1}".format(currentCellCoordinate, currentCellType))
+        print("Current cell: {0} / {1}".format(currentCellCoordinate, currentCellType))
 
         if currentCellType == '+' or currentCellType == '|':
             
             nextBottomCellCoordinate = (currentCellCoordinate[0], currentCellCoordinate[1] + 1)
-            # print("Next cell: {0} / {1}".format(nextBottomCellCoordinate, ground[nextBottomCellCoordinate]))
+            print("Next cell: {0} / {1}".format(nextBottomCellCoordinate, ground[nextBottomCellCoordinate]))
             # Exit mechanism, water cannot propagate anymore below the max y level
             if nextBottomCellCoordinate[1] > maxY:
                 continue
 
             # Go down, otherwise go left or right
             if ground[nextBottomCellCoordinate] == '.':
-                # print("Going down")
+                print("Going down")
                 ground[nextBottomCellCoordinate] = '|'
                 cellQueue.append(nextBottomCellCoordinate)
             else:
@@ -90,18 +92,20 @@ def countWaterTiles (ground, startingCell):
                     if nextLeftCellType == '.' or nextRightCellType == '.' :
                         cellQueue.extend(settleWater(ground, (currentCellCoordinate)))
 
-        # printGround(ground)
+        printGroundPart(ground, currentCellCoordinate[0], currentCellCoordinate[1])
         # input("")
 
         if not cellQueue:
+            ground[currentCellCoordinate] = 'X'
+            printGroundPart(ground, currentCellCoordinate[0], currentCellCoordinate[1])
             break
 
         # Safeguard mechanism to prevent infinite loop
         i += 1
         if i >= max_iterations: 
             break
-    printGround(ground)
-    return sum(1 for c in ground.values() if c == '~' or c =='|')
+    # printGround(ground)
+    return sum(1 for c in ground.values() if c == '~' or c =='|' or c == 'X')
 
 def settleWater (ground, origin):
     x_coordinates, _ = zip(*ground.keys())
@@ -127,7 +131,7 @@ def settleWater (ground, origin):
     # print((leftClayCoordinate, rightClayCoordinate))
 
     if leftClayCoordinate and rightClayCoordinate:
-        # print("Fill with still water to both sides")
+        print("Fill with still water to both sides")
         for x in range(leftClayCoordinate[0] + 1, rightClayCoordinate[0]):
             if ground[(x, y)] == '.' or ground[(x, y)] == '|':
                 ground[(x, y)] = '~'
@@ -150,10 +154,10 @@ def fillWaterToTheSide (ground, p_from, p_to, y):
 
     if p_from > p_to:
         step *= -1
-        # print("Fill with flowing water to the left")
+        print("Fill with flowing water to the left")
         pass
     else:
-        # print("Fill with flowing water to the right")
+        print("Fill with flowing water to the right")
         pass
 
     for x in range(p_from, p_to, step):
@@ -172,6 +176,21 @@ def printGround (ground):
     maxX = max(x_coordinates)
     minY = min(y_coordinates)
     maxY = max(y_coordinates)
+
+    print()
+    for y in range(minY, maxY + 1):
+        for x in range(minX, maxX + 1 ):
+            print(ground[(x, y)], sep=' ', end='', flush=True)
+        print()
+    return
+
+def printGroundPart (ground, x, y):
+    """https://stackoverflow.com/questions/12974474/how-to-unzip-a-list-of-tuples-into-individual-lists#12974504"""
+    x_coordinates, y_coordinates = zip(*ground.keys())
+    minX = max(min(x_coordinates), x - 20)
+    maxX = min(max(x_coordinates), x + 20)
+    minY = max(min(y_coordinates), y - 10)
+    maxY = min(max(y_coordinates), y + 10)
 
     print()
     for y in range(minY, maxY + 1):
