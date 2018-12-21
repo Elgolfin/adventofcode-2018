@@ -35,7 +35,9 @@ def initializeGround (inputs):
     
     # Initialize a ground full of sand
     for y in range(0, maxY + 1):
-        for x in range(minX, maxX + 1 ):
+        # In case there is an overflow on the left or on the right (x-axis is infintie)
+        # Add 1 unit on each side
+        for x in range(minX - 1, maxX + 1 + 1):
             ground[(x, y)] = '.'
 
     # Initialize the spring of water
