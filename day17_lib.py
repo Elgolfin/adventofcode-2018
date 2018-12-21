@@ -179,7 +179,10 @@ def settleWater (ground, origin, flowingWaterHistory, debug = False):
                 if ground[(x, y)] == '|' and (x, y) in flowingWaterHistory :
                     flowingWaterHistory.remove((x,y))
                 ground[(x, y)] = '~'
-            newOrigin.append((origin[0], origin[1] - 1))
+            if ground[(origin[0], origin[1] - 1)] == '|':
+                newOrigin.append((origin[0], origin[1] - 1))
+            else:
+                newOrigin.append(flowingWaterHistory.pop())
     
     if leftClayCoordinate and not rightClayCoordinate:
         newOrigin.append(fillWaterToTheSide(ground, leftClayCoordinate[0] + 1, maxX + 1, y, debug))
