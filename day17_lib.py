@@ -123,13 +123,13 @@ def countWaterTiles (ground, startingCell, debug = False):
             if debug:
                 print("Queue is empty")
             if currentCellCoordinate != lastFlowingWaterCellCoordinate:
-                lastFlowingWaterCellCoordinate = flowingWaterHistory.pop()
-                cellQueue.append(lastFlowingWaterCellCoordinate)
+                if flowingWaterHistory:
+                    lastFlowingWaterCellCoordinate = flowingWaterHistory.pop()
+                    cellQueue.append(lastFlowingWaterCellCoordinate)
                 if debug:
                     print("Last flowing water cell: {0}".format(lastFlowingWaterCellCoordinate))
                 continue
             else:
-                ground[currentCellCoordinate] = 'X'
                 if debug:
                     print()
                     print("__FINAL__")
@@ -142,7 +142,7 @@ def countWaterTiles (ground, startingCell, debug = False):
             break
     
     printGround(ground)
-    return sum(1 for c in ground.values() if c == '~' or c =='|' or c == 'X')
+    return sum(1 for c in ground.values() if c == '~' or c =='|'), sum(1 for c in ground.values() if c == '~')
 
 def settleWater (ground, origin, flowingWaterHistory, debug = False):
     x_coordinates, _ = zip(*ground.keys())
@@ -182,7 +182,8 @@ def settleWater (ground, origin, flowingWaterHistory, debug = False):
             if ground[(origin[0], origin[1] - 1)] == '|':
                 newOrigin.append((origin[0], origin[1] - 1))
             else:
-                newOrigin.append(flowingWaterHistory.pop())
+                if flowingWaterHistory:
+                    newOrigin.append(flowingWaterHistory.pop())
     
     if leftClayCoordinate and not rightClayCoordinate:
         newOrigin.append(fillWaterToTheSide(ground, leftClayCoordinate[0] + 1, maxX + 1, y, debug))
