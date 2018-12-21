@@ -104,11 +104,12 @@ class day17TestCase(unittest.TestCase):
         result, _ = countWaterTiles(ground, (500, 0))
         self.assertEqual(10, result)
 
-    def test_countWaterTiles_should_return_57(self):
+    def test_countWaterTiles_should_return_57_and_29(self):
         """Test for countWaterTiles"""
         ground = initializeGround(self.input1)
-        result, _ = countWaterTiles(ground, (500, 0))
-        self.assertEqual(57, result)
+        result1, result2 = countWaterTiles(ground, (500, 0))
+        self.assertEqual(57, result1)
+        self.assertEqual(29, result2)
 
     def test_countWaterTiles_should_return_11(self):
         """Test for countWaterTiles"""
