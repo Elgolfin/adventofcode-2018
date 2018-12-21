@@ -59,4 +59,4 @@ jobs:
             python day10.py inputs/day10.txt
             python day11.py inputs/day11.txt
             python day12.py inputs/day12.txt
-            python day17.py inputs/day12.txt
+            # python day17.py inputs/day17.txt
