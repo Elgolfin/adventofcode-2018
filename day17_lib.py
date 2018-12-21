@@ -30,6 +30,7 @@ def initializeGround (inputs):
 
     minX = min(clay_x_coordinates)
     maxX = max(clay_x_coordinates)
+    minY = min(clay_y_coordinates)
     maxY = max(clay_y_coordinates)
     
     # Initialize a ground full of sand
@@ -45,13 +46,17 @@ def initializeGround (inputs):
         ground[(clay_x_coordinates[i], clay_y_coordinates[i])] = '#'
     # printGround(ground)
 
+    ground[(-1, -1)] = (minY, maxY)
+
     return ground
 
 def countWaterTiles (ground, startingCell, debug = False):
-    x_coordinates, y_coordinates = zip(*ground.keys())
+    minY = ground[(-1, -1)][0]
+    maxY = ground[(-1, -1)][1]
+    ground.pop((-1, -1))
+    x_coordinates, _ = zip(*ground.keys())
     minX = min(x_coordinates)
     maxX = max(x_coordinates)
-    maxY = max(y_coordinates)
     
     if debug:
         print("minx x/ max x/ max y: {0}/{1}/{2}".format(minX, maxX, maxY))
@@ -142,7 +147,7 @@ def countWaterTiles (ground, startingCell, debug = False):
             break
     
     # printGround(ground)
-    return sum(1 for c in ground.values() if c == '~' or c =='|'), sum(1 for c in ground.values() if c == '~')
+    return sum(1 for (x, y), c in ground.items() if (y >= minY and y <= maxY) and (c == '~' or c =='|')), sum(1 for c in ground.values() if c == '~')
 
 def settleWater (ground, origin, flowingWaterHistory, debug = False):
     x_coordinates, _ = zip(*ground.keys())
