@@ -149,32 +149,30 @@ def settleWater (ground, origin, flowingWaterHistory, debug = False):
     minX = min(x_coordinates)
     maxX = max(x_coordinates)
     y = origin[1]
-    leftClayCoordinate = set()
-    rightClayCoordinate = set()
+    leftStopCoordinate = set()
+    rightStopCoordinate = set()
     newOrigin = list()
     for x in range(origin[0], maxX + 1):
         if ground[(x, y + 1)] != '#' and ground[(x, y + 1)] != '~':
             break
         if ground[(x, y)] == '#':
             if debug:
-                print("  found right clay")
-            rightClayCoordinate = (x, y)
+                print("  found right stop")
+            rightStopCoordinate = (x, y)
             break
     for x in range(origin[0], minX - 1, -1):
         if ground[(x, y + 1)] != '#' and ground[(x, y + 1)] != '~':
             break
         if ground[(x, y)] == '#':
             if debug:
-                print("  found left clay")
-            leftClayCoordinate = (x, y)
+                print("  found left stop")
+            leftStopCoordinate = (x, y)
             break
 
-    # print((leftClayCoordinate, rightClayCoordinate))
-
-    if leftClayCoordinate and rightClayCoordinate:
+    if leftStopCoordinate and rightStopCoordinate:
         if debug:
             print("Fill with still water to both sides")
-        for x in range(leftClayCoordinate[0] + 1, rightClayCoordinate[0]):
+        for x in range(leftStopCoordinate[0] + 1, rightStopCoordinate[0]):
             if ground[(x, y)] == '.' or ground[(x, y)] == '|':
                 if ground[(x, y)] == '|' and (x, y) in flowingWaterHistory :
                     flowingWaterHistory.remove((x,y))
@@ -185,13 +183,13 @@ def settleWater (ground, origin, flowingWaterHistory, debug = False):
             if flowingWaterHistory:
                 newOrigin.append(flowingWaterHistory.pop())
     
-    if leftClayCoordinate and not rightClayCoordinate:
-        newOrigin.append(fillWaterToTheSide(ground, leftClayCoordinate[0] + 1, maxX + 1, y, debug))
+    if leftStopCoordinate and not rightStopCoordinate:
+        newOrigin.append(fillWaterToTheSide(ground, leftStopCoordinate[0] + 1, maxX + 1, y, debug))
     
-    if not leftClayCoordinate and rightClayCoordinate:
-        newOrigin.append(fillWaterToTheSide(ground, rightClayCoordinate[0] - 1, minX - 1, y, debug))
+    if not leftStopCoordinate and rightStopCoordinate:
+        newOrigin.append(fillWaterToTheSide(ground, rightStopCoordinate[0] - 1, minX - 1, y, debug))
     
-    if not leftClayCoordinate and not rightClayCoordinate:
+    if not leftStopCoordinate and not rightStopCoordinate:
         newOrigin.append(fillWaterToTheSide(ground, origin[0], maxX + 1, y, debug))
         newOrigin.append(fillWaterToTheSide(ground, origin[0], minX - 1, y, debug))
 
@@ -203,20 +201,27 @@ def fillWaterToTheSide (ground, p_from, p_to, y, debug = False):
     if p_from > p_to:
         step *= -1
         if debug:
-            print("Fill with flowing water to the left")
+            print("Fill with flowing water from {0} to {1}".format(p_from, p_to))
         pass
     else:
         if debug:
-            print("Fill with flowing water to the right")
+            print("Fill with flowing water from {0} to {1}".format(p_from, p_to))
         pass
 
     for x in range(p_from, p_to, step):
         newOrigin = (x, y)
-        if (ground[(x, y + 1)] == '#' or ground[(x, y + 1)] == '~') and ground[(x, y)] == '.' or ground[(x, y)] == '|':
+        if (ground[(x, y + 1)] == '#' or ground[(x, y + 1)] == '~') and (ground[(x, y)] == '.' or ground[(x, y)] == '|'):
+            if debug:
+                print('Fill cell {0} with flowing water and continue'.format((x, y)))
             ground[(x, y)] = '|'
         else:
+            if debug:
+                print('Fill cell {0} with flowing water and stop'.format((x, y)))
+            # newOrigin = (x - step, y)
             ground[newOrigin] = '|'
             break
+    if debug:
+        print("{0} will be added to the queue".format(newOrigin))
     return newOrigin
 
 def printGround (ground):
