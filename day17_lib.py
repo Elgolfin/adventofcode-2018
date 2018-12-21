@@ -141,7 +141,7 @@ def countWaterTiles (ground, startingCell, debug = False):
         if i >= max_iterations: 
             break
     
-    printGround(ground)
+    # printGround(ground)
     return sum(1 for c in ground.values() if c == '~' or c =='|'), sum(1 for c in ground.values() if c == '~')
 
 def settleWater (ground, origin, flowingWaterHistory, debug = False):
