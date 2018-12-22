@@ -34,6 +34,9 @@ jobs:
             python -m unittest day07_test.py -v
             coverage run day07_test.py -v
             coverage report -m
+            python -m unittest day09_test.py -v
+            coverage run day09_test.py -v
+            coverage report -m
             python -m unittest day10_test.py -v
             coverage run day10_test.py -v
             coverage report -m
@@ -56,7 +59,7 @@ jobs:
             python day05.py inputs/day05.txt
             python day06.py inputs/day06.txt
             python day07.py inputs/day07.txt
+            python day09.py
             python day10.py inputs/day10.txt
             python day11.py inputs/day11.txt
-            python day12.py inputs/day12.txt
-            # python day17.py inputs/day17.txt
+            python day12.py inputs/day12.txt            # python day17.py inputs/day17.txt
